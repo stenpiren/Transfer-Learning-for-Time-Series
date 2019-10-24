@@ -153,7 +153,7 @@ def reduce_function(reduce_algorithm_name, x_train, y_train, C, init_clusters_pe
 					  averaging_algorithm='dba', distance_algorithm='dtw',
 					  init_clusters_per_class=init_clusters_per_class), 'dtw'
 
-root_dir = '/b/home/uha/hfawaz-datas/dl-tsc/'
+root_dir = '/home/user4/notebook/git/bigdata18'
 
 results_dir = root_dir+'results/fcn/'
 
