@@ -1,0 +1,3 @@
+y1_TEST_MSE : 0.00363790
+y2_TEST_MSE : 0.00277994
+Execute Time : 142.849s
