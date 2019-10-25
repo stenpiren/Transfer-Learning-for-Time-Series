@@ -1,6 +1,6 @@
-from distutils.core import setup
+from distutils.core import setup, Extension
 from Cython.Build import cythonize
+import numpy
 
-setup(
-      ext_modules=cythonize("dtw.pyx"),
-)
+ext = Extension("dtw", sources=["dtw.pyx"], include_dirs=['.',numpy.get_include()])
+setup(name="dtw", ext_modules=cythonize([ext]))
