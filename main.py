@@ -21,6 +21,10 @@ from knn import get_neighbors
 from datareduce import reduce
 
 import pandas as pd
+import tensorflow as tf
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+tf.keras.backend.set_session(tf.Session(config=config))
 
 def read_data_from_dataset(use_init_clusters=True):
 
@@ -71,7 +75,9 @@ def build_model(input_shape, nb_classes, pre_model=None):
 	output_layer = keras.layers.Dense(nb_classes, activation='softmax')(gap_layer)
 
 	model = keras.models.Model(inputs=input_layer, outputs=output_layer)
-
+	print("Source info:")
+	print(pre_model.summary())
+	print(f"Target shape: {input_shape}")
 	if pre_model is not None:
 
 		for i in range(len(model.layers)-1):
@@ -115,7 +121,7 @@ def train(pre_model=None):
 
 	start_time = time.time()
 	# remove last layer to replace with a new one 
-	input_shape = (None,x_train.shape[2])
+	input_shape = (None,x_train.shape[2]) # x_train.shape[2] is num of variable
 	model = build_model(input_shape, nb_classes,pre_model)
 
 	if verbose == True: 
@@ -153,7 +159,7 @@ def reduce_function(reduce_algorithm_name, x_train, y_train, C, init_clusters_pe
 					  averaging_algorithm='dba', distance_algorithm='dtw',
 					  init_clusters_per_class=init_clusters_per_class), 'dtw'
 
-root_dir = '/home/user4/notebook/git/bigdata18'
+root_dir = '/home/user4/notebook/git/bigdata18/'
 
 results_dir = root_dir+'results/fcn/'
 
@@ -161,9 +167,9 @@ batch_size = 16
 nb_epochs = 2000
 verbose = False
 
-write_dir_root = root_dir+'/transfer-learning-results/'
+write_dir_root = root_dir+'transfer-learning-results/'
 
-if sys.argv[1] == 'transfer_learning':
+if sys.argv[1] == 'transfer-learning':
 	# loop through all archives
 	for archive_name in ARCHIVE_NAMES:
 		# read all datasets
@@ -199,7 +205,7 @@ if sys.argv[1] == 'transfer_learning':
 
 				train(pre_model)
 
-elif sys.argv[1] == 'train_fcn_scratch':
+elif sys.argv[1] == 'pre-train':
 	# loop through all archives
 	for archive_name in ARCHIVE_NAMES:
 		# read all datasets
